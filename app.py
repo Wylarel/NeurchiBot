@@ -132,4 +132,4 @@ def printstats():
     print("Seen Posts: " + str(seen_posts) + "\nAnalyzed Posts: " + str(analyzed_posts) + "\nAnalyzed Comments: " + str(analyzed_comments) + "\nDetected Comments: " + str(detected_comments))
 
 
-connectaccount("neurchibotv2@gmail.com", open("PASSWORD", "r").read())
+connectaccount("neurchibotv2@gmail.com", open("PASSWORD.txt", "r").read())
