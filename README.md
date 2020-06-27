@@ -4,6 +4,7 @@
 [![Facebook](https://img.shields.io/badge/Invite-Facebook-blue)](https://www.fb.com/NeurchiBotV2)
 [![Messenger](https://img.shields.io/badge/Chat-Messenger-blue)](https://www.m.me/NeurchiBotV2)
 [![Version](https://img.shields.io/badge/Version-2.1-orange)](#)
+
 Chers modérateur·trices, avez-vous déjà rêvé d'un Neurchi dénnué d'humanité, d'une dictature sans pardon envers les noobies, d'une modération aussi paresseuse qu'inutile ? Nous aussi ! A NeurchiBot™, ce rêve, nous faisons tout pour qu'il devienne réalité. La nouvelle version du décédé bot neurchi (#RipTitanj) se fait déjà entendre au loin !
 
 ### Agenda
