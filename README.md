@@ -3,8 +3,14 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://wylarel.com/mit/)
 [![Messenger](https://img.shields.io/badge/Chat-Messenger-blue)](https://www.m.me/NeurchiBotV2)
 
-Toutes les infos arrivent bientôt :)
+Chers modérateur.trices, avez-vous déjà rêvé d'un Neurchi dénnué d'humanité, d'une dictature sans pardon envers les noobies, d'une modération aussi paresseuse qu'inutile ? Nous aussi ! A NeurchiBot™, ce rêve, nous faisons tout pour qu'il devienne réalité. La nouvelle version du décédé bot neurchi (#RipTitanj) se fait déjà entendre au loin !
+
+### Agenda
+- **29/06 - 5/07** - NeurchiBot tournera secrètement sans interaction publique; même pas un angry react. Le but est de récolter un maximum de données avant de le rendre vivant pour éviter un maximum les faux positifs à son déploiement.
+- **5/07 - \*** - NeurchiBot devrait être lancé dans sa version rudimentaire. Il sera régulièrement mis à jour.
 
 
 ## NeurchiBot V2
-This project was developed for a French-speaking community and is not intended to be international. More information on the content of this project soon. *Maybe.*
+This project was developed by and for a French-speaking community and is not intended to go international.
+  
+More information in english on the content of this project soon. *Maybe.*
