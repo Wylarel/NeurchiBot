@@ -5,11 +5,10 @@
 [![Messenger](https://img.shields.io/badge/Chat-Messenger-blue)](https://www.m.me/NeurchiBotV2)
 [![Version](https://img.shields.io/badge/Version-2.1-orange)](#)
 
-
 Chers modérateur·trices, avez-vous déjà rêvé d'un Neurchi dénnué d'humanité, d'une dictature sans pardon envers les noobies, d'une modération aussi paresseuse qu'inutile ? Nous aussi ! A NeurchiBot™, ce rêve, nous faisons tout pour qu'il devienne réalité. La nouvelle version du décédé bot neurchi (#RipTitanj) se fait déjà entendre au loin !
 
 ### Agenda
-- **28/06 - 29/06** - NeurchiBot devrait rejoindre une grande partie des groupes Neurchi ce weekend. **Update:** Le compte du bot a été bloqué par facebook. Cette periode pourait s'étendre sur la deuxième phase.
+- **28/06 - 29/06** - NeurchiBot devrait rejoindre une grande partie des groupes Neurchi ce weekend. **Update:** Le compte du bot a été bloqué par facebook. Cette phase pourait s'étendre sur la deuxième phase.
 - **30/06 - 5/07** - NeurchiBot tournera secrètement sans interaction publique; même pas un angry react. Le but est de récolter un maximum de données avant de le rendre vivant pour éviter un maximum les faux positifs à son déploiement.
 - **5/07 - \*** - NeurchiBot devrait être lancé dans sa version rudimentaire. Il sera régulièrement mis à jour.
 
