@@ -91,7 +91,11 @@ async def analyzecomment(comment: WebElement):
 
     commenttext = comment.find_element_by_xpath("div[1]")
     commentid = str(comment.find_element_by_xpath('..').get_attribute("id"))
-    commentauthorid: str = comment.find_element_by_xpath("h3/a").get_attribute("href").split("?")[0].replace("https://mbasic.facebook.com/", "")
+    commentauthorid: str = comment.find_element_by_xpath("h3/a").get_attribute("href").replace("https://mbasic.facebook.com/", "")
+    if "profile.php" in commentauthorid:
+        commentauthorid = commentauthorid.replace("profile.php?id=", "").split("?")[0]
+    else:
+        commentauthorid = commentauthorid.split("?")[0]
     try:
         tag = commenttext.find_element_by_xpath("a")
     except NoSuchElementException:
