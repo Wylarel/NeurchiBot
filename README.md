@@ -1,5 +1,5 @@
 # NeurchiBot
-## [EN BELOW] NeurchiBot V2, une deuxième tentative du projet NeurchiBot
+## [FR] NeurchiBot V2, une deuxième tentative du projet NeurchiBot
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://wylarel.com/mit/)
 [![Facebook](https://img.shields.io/badge/Invite-Facebook-blue)](https://www.fb.com/NeurchiBotV2)
 [![Messenger](https://img.shields.io/badge/Chat-Messenger-blue)](https://www.m.me/NeurchiBotV2)
@@ -13,7 +13,7 @@ Chers modérateur·trices, avez-vous déjà rêvé d'un Neurchi dénnué d'human
 - **5/07*** - NeurchiBot devrait être lancé dans sa version rudimentaire. Il sera régulièrement mis à jour.
 
 
-## NeurchiBot V2
+## [EN] NeurchiBot V2, a second attempt of the NeurchiBot project
 This project was developed by and for a French-speaking community and is not intended to go international.
-  
+
 More information in english on the content of this project soon. *Maybe.*
