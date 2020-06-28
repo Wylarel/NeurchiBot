@@ -1,4 +1,6 @@
 ressources/
 .idea/
-PASSWORD.txt
+*.pyc
 *.txt
+*.json
+!messages.json
