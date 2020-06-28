@@ -19,7 +19,6 @@ async def savestats():
     with open('stats.json', 'w') as outfile:
         json.dump(new_stats, outfile, indent=4)
 
-    print(str(new_stats))
     pass
 
 

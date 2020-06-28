@@ -5,7 +5,7 @@ import random
 
 import files
 from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
 
@@ -19,7 +19,7 @@ async def connect(email="neurchibotv2@gmail.com", password=open("PASSWORD.txt", 
     global driver
 
     options = webdriver.ChromeOptions()
-    options.add_argument("headless")
+    # options.add_argument("headless")
     driver = webdriver.Chrome(options=options)
     driver.get("https://mbasic.facebook.com/")
 
@@ -52,15 +52,19 @@ async def analyzewall():
 
 async def renewwall():
     try:
-        for button in driver.find_elements_by_css_selector("#root div a.z"):
+        for button in driver.find_elements_by_css_selector("#root div a"):
             if "/stories.php?aftercursorr=" in button.get_attribute("href"):
                 button.click()
+                print("Next page")
                 return
+        print("Couldn't find the right button")
     except NoSuchElementException:
-        await files.printstats()
-        print("No more posts on wall, refreshing the page in 30 seconds")
-        await sleep(30)
-        driver.refresh()
+        pass
+    await files.printstats()
+
+    print("No more posts on wall, refreshing the page in 30 seconds")
+    await sleep(30)
+    driver.refresh()
 
 
 async def analyzepost(post: WebElement):
@@ -78,11 +82,13 @@ async def analyzepost(post: WebElement):
     driver.get(commentslink)
 
     files.analyzed_posts += 1
-    for comment in driver.find_elements_by_xpath("//div[@id='m_story_permalink_view']/div/div/div/div/div"):
+    for post_comment in driver.find_elements_by_xpath("//div[@id='m_story_permalink_view']/div/div/div/div/div"):
         try:
-            commenttext = comment.find_element_by_xpath("div[1]")
-            await analyzecomment(comment)
+            commenttext = post_comment.find_element_by_xpath("div[1]")
+            await analyzecomment(post_comment)
         except NoSuchElementException:
+            pass
+        except StaleElementReferenceException:
             pass
 
     await switchtab(0)
@@ -110,15 +116,11 @@ async def analyzecomment(comment: WebElement):
         if len(commenttexttext) < len(tagtext) + 10:
             temphistory = await files.readhistory()
             try:
-                if commentid in temphistory[commentauthorid]["warnings"]:
+                if commentid in temphistory["warnings"][commentauthorid]:
                     print("---- Already Seen Tag: \"" + tagtext.replace("\n", "") + "\"\n" + driver.current_url)
                     return
             except KeyError:
                 pass
-            answerlink = ""
-            for element in comment.find_elements_by_xpath("div[last()]/a"):
-                if "Répondre" in element.text:
-                    answerlink = element.get_attribute("href")
 
             await switchtab(2)
             driver.get(href)
@@ -127,18 +129,21 @@ async def analyzecomment(comment: WebElement):
                 await switchtab(1)
                 return
 
+            await switchtab(1)
+            answerlink = ""
+            for element in comment.find_elements_by_xpath("div[3]/a"):
+                if "répon" in element.text.lower():
+                    answerlink = element.get_attribute("href")
+
             if answerlink != "":
                 driver.get(answerlink)
                 with open('messages.json', encoding="utf-8") as messages_json:
                     messages = json.load(messages_json, encoding="utf-8")
                     driver.find_element_by_css_selector("#composerInput").send_keys((messages["prefix"] + messages["wildtag"][random.randint(0, len(messages["wildtag"])-1)] + messages["suffix"]).replace("{}", commentid))
                     driver.find_element_by_xpath("//input[@type='submit'][@value='Répondre']").click()
-
             else:
-                await switchtab(1)
                 print("---- NO ANSWER BUTTON " + driver.current_url)
                 return
-
             print("---- Potential Tag: \"" + tagtext.replace("\n", "") + "\"\n" + driver.current_url)
             warning_content = {
                 commentid:
@@ -149,6 +154,7 @@ async def analyzecomment(comment: WebElement):
             }
 
             await files.addtohistory("warnings", commentauthorid, warning_content)
+            await files.printstats()
             await switchtab(1)
 
     else:
