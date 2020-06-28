@@ -17,7 +17,7 @@ async def savestats():
                  "analyzed_comments": analyzed_comments}
 
     with open('stats.json', 'w') as outfile:
-        json.dump(new_stats, outfile)
+        json.dump(new_stats, outfile, indent=4)
 
     print(str(new_stats))
     pass
@@ -33,4 +33,4 @@ async def addtohistory(category, key, value: dict):
     currenthistory = await readhistory()
     currenthistory[category][key] = value
     with open('history.json', 'w') as outfile:
-        json.dump(currenthistory, outfile)
+        json.dump(currenthistory, outfile, indent=4)

@@ -1,5 +1,7 @@
+import json
 from asyncio import sleep
 from datetime import date, datetime
+import random
 
 import files
 from selenium import webdriver
@@ -90,10 +92,11 @@ async def analyzecomment(comment: WebElement):
     files.analyzed_comments += 1
 
     commenttext = comment.find_element_by_xpath("div[1]")
+    commenttexttext = str(commenttext.text)
     commentid = str(comment.find_element_by_xpath('..').get_attribute("id"))
     commentauthorid: str = comment.find_element_by_xpath("h3/a").get_attribute("href").replace("https://mbasic.facebook.com/", "")
     if "profile.php" in commentauthorid:
-        commentauthorid = commentauthorid.replace("profile.php?id=", "").split("?")[0]
+        commentauthorid = commentauthorid.replace("profile.php?id=", "").split("&")[0]
     else:
         commentauthorid = commentauthorid.split("?")[0]
     try:
@@ -101,24 +104,53 @@ async def analyzecomment(comment: WebElement):
     except NoSuchElementException:
         return
 
-    if "mbasic.facebook.com/" in tag.get_attribute("href") and "/groups/" not in tag.get_attribute("href") and "/hashtag/" not in tag.get_attribute("href") and tag.text not in tag.get_attribute("href"):
-        if len(commenttext.text) < len(tag.text) + 10:
+    href = tag.get_attribute("href")
+    tagtext = tag.text
+    if "mbasic.facebook.com/" in href and "/groups/" not in href and "/hashtag/" not in href and tagtext not in href:
+        if len(commenttexttext) < len(tagtext) + 10:
             temphistory = await files.readhistory()
             try:
                 if commentid in temphistory[commentauthorid]["warnings"]:
-                    print("---- Already Seen Tag: \"" + tag.text.replace("\n", "") + "\"\n" + driver.current_url)
+                    print("---- Already Seen Tag: \"" + tagtext.replace("\n", "") + "\"\n" + driver.current_url)
                     return
             except KeyError:
                 pass
-            print("---- Potential Tag: \"" + tag.text.replace("\n", "") + "\"\n" + driver.current_url)
+            answerlink = ""
+            for element in comment.find_elements_by_xpath("div[last()]/a"):
+                if "Répondre" in element.text:
+                    answerlink = element.get_attribute("href")
+
+            await switchtab(2)
+            driver.get(href)
+            if "profile picture" not in driver.find_element_by_css_selector("div#root").find_element_by_xpath("div/div/div[2]/div/div/div/a/img").get_attribute("alt"):
+                print("---- Page Tag: \"" + tagtext.replace("\n", "") + "\"\n" + driver.current_url)
+                await switchtab(1)
+                return
+
+            if answerlink != "":
+                driver.get(answerlink)
+                with open('messages.json', encoding="utf-8") as messages_json:
+                    messages = json.load(messages_json, encoding="utf-8")
+                    driver.find_element_by_css_selector("#composerInput").send_keys((messages["prefix"] + messages["wildtag"][random.randint(0, len(messages["wildtag"])-1)] + messages["suffix"]).replace("{}", commentid))
+                    driver.find_element_by_xpath("//input[@type='submit'][@value='Répondre']").click()
+
+            else:
+                await switchtab(1)
+                print("---- NO ANSWER BUTTON " + driver.current_url)
+                return
+
+            print("---- Potential Tag: \"" + tagtext.replace("\n", "") + "\"\n" + driver.current_url)
             warning_content = {
                 commentid:
                     {"date": str(date.today()),
-                     "comment": commenttext.text,
+                     "comment": commenttexttext,
                      "publication": driver.current_url
                      }
             }
+
             await files.addtohistory("warnings", commentauthorid, warning_content)
+            await switchtab(1)
+
     else:
         pass
 

@@ -1,6 +1,12 @@
-{"wildtag":
-  ["Vire-moi tout de suite ce tag cancérigène",
+{
+  "prefix":"[COMMENTAIRE AUTOMATIQUE]\n\n",
+  "wildtag":[
+    "Vire-moi tout de suite ce tag cancérigène",
     "Si tu tagues il va t'arriver des bricoles",
     "Ne tagues pas tes potes sauvagement, tu risques de te faire bannir très fort",
-    "Tu es en train de réduire ton espérance de vie dans le groupe"]
+    "Tu es en train de réduire ton espérance de vie dans le groupe",
+    "Neurchibot a détecté votre commentaire comme enfraignant l'article 1 du code des Neurchi. Supprime ça le sang d'tes morts.",
+    "Supprime ton tag sauvage"
+  ],
+  "suffix":"\n\n⚠️ NeurchiBot V2 est encore en phase de test. Si vous pensez que votre commentaire ne contient pas de tag sauvage, merci de répondre à celui-ci ou de nous envoyer un message avec votre référence NBV2 pour nous le signaler.\n\nVotre référence NBV2 est: {}."
 }
