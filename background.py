@@ -36,14 +36,14 @@ async def connect(email="neurchibotv2@gmail.com", password=open("PASSWORD.txt", 
 
 
 async def analyzewall():
-    posts = driver.find_elements_by_css_selector("#root div section article")
-    for post in posts:
-        header = post.find_element_by_css_selector("div header table").text
-        if "neurchi" in header.lower():
-            await analyzepost(post)
-    await renewwall()
-    await sleep(2)
-    await analyzewall()
+    while True:
+        posts = driver.find_elements_by_css_selector("#root div section article")
+        for post in posts:
+            header = post.find_element_by_css_selector("div header table").text
+            if "neurchi" in header.lower():
+                await analyzepost(post)
+        await renewwall()
+        await sleep(2)
 
 
 async def renewwall():
