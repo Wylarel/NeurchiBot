@@ -11,6 +11,15 @@ Chers modérateur·trices du monde merveilleux des Neurchi, avez-vous déjà rê
 - **28/06 - 29/06** - NeurchiBot tournera secrètement sans interaction publique; même pas un angry react. Le but est de récolter un maximum de données avant de le rendre vivant pour éviter un maximum les faux positifs à son déploiement.
 - **30/06** - NeurchiBot devrait être lancé dans sa version rudimentaire. Il sera régulièrement mis à jour.
 
+## Features
+- Detection de tags sauvages
+  - Detection uniquement de tag de profils et page
+  - Ne signale plus les tags de page
+  - *TODO: Detecter si la personne taguée est dans le groupe ou pas, bien que dans les deux cas ça reste un tag sauvage si aucun commentaire supplémentaire, on pourrait personaliser les messages*
+  - *TODO: Augmenter la liste des messages de réponse possible et améliorer leur qualité*
+- *TODO: Detection de mot clés*
+  - *TODO: Pouet pouet mdr*
+
 
 ## [EN] NeurchiBot V2, a second attempt of the NeurchiBot project
 This project was developed by and for a French-speaking community and is not intended to go international.
