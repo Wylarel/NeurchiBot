@@ -10,7 +10,7 @@ Chers modérateur·trices, avez-vous déjà rêvé d'un Neurchi dénnué d'human
 ### Agenda
 - **28/06 - 29/06** - NeurchiBot devrait rejoindre une grande partie des groupes Neurchi ce weekend. **Update:** Le compte du bot a été bloqué par facebook. Cette phase pourait s'étendre sur la deuxième phase.
 - **30/06 - 5/07** - NeurchiBot tournera secrètement sans interaction publique; même pas un angry react. Le but est de récolter un maximum de données avant de le rendre vivant pour éviter un maximum les faux positifs à son déploiement.
-- **5/07*** - NeurchiBot devrait être lancé dans sa version rudimentaire. Il sera régulièrement mis à jour.
+- **5/07** - NeurchiBot devrait être lancé dans sa version rudimentaire. Il sera régulièrement mis à jour.
 
 
 ## [EN] NeurchiBot V2, a second attempt of the NeurchiBot project
