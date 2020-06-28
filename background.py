@@ -19,7 +19,7 @@ async def connect(email="neurchibotv2@gmail.com", password=open("PASSWORD.txt", 
     global driver
 
     options = webdriver.ChromeOptions()
-    # options.add_argument("headless")
+    options.add_argument("headless")  # Ne commenter cette ligne uniquement en mode debug
     driver = webdriver.Chrome(options=options)
     driver.get("https://mbasic.facebook.com/")
 
@@ -30,7 +30,7 @@ async def connect(email="neurchibotv2@gmail.com", password=open("PASSWORD.txt", 
         driver.find_element_by_name('xc_message')
         print("NeurchiBot connected")
     except NoSuchElementException:
-        print("NeurchiBot couldn't connect to Facebook")
+        print("NeurchiBot couldn't connect to Facebook")  # Généralement si les identifiants sont mauvais
         await sleep(20)
         driver.quit()
         return
@@ -41,13 +41,13 @@ async def connect(email="neurchibotv2@gmail.com", password=open("PASSWORD.txt", 
 
 async def analyzewall():
     while True:
-        posts = driver.find_elements_by_css_selector("#root div section article")
+        posts = driver.find_elements_by_css_selector("#root div section article")  # Prend tout les posts sur la page actuelle
         for post in posts:
             header = post.find_element_by_css_selector("div header table").text
             if "neurchi" in header.lower():
                 await analyzepost(post)
-        await renewwall()
-        await sleep(2)
+        await renewwall()  # Renouvelle la page actuelle
+        await sleep(2)  # Délai par pure précaution, théoriquement retirable
 
 
 async def renewwall():
@@ -55,7 +55,6 @@ async def renewwall():
         for button in driver.find_elements_by_css_selector("#root div a"):
             if "/stories.php?aftercursorr=" in button.get_attribute("href"):
                 button.click()
-                print("Next page")
                 return
         print("Couldn't find the right button")
     except NoSuchElementException:
@@ -82,19 +81,40 @@ async def analyzepost(post: WebElement):
     driver.get(commentslink)
 
     files.analyzed_posts += 1
+    await files.savestats()
+    await analyzecomments()
+
+    await switchtab(0)
+
+
+async def analyzecomments():
+    await switchtab(1)  # Post Facebook & Commentaires
     for post_comment in driver.find_elements_by_xpath("//div[@id='m_story_permalink_view']/div/div/div/div/div"):
         try:
-            commenttext = post_comment.find_element_by_xpath("div[1]")
+            commenttext = post_comment.find_element_by_css_selector("div")
             await analyzecomment(post_comment)
         except NoSuchElementException:
             pass
         except StaleElementReferenceException:
             pass
+    try:
+        await switchtab(1)  # Post Facebook & Commentaires
+        for link in driver.find_elements_by_css_selector("div#m_story_permalink_view div div div div a"):
+            try:
+                if "Commentaires précédents" in link.text:
+                    link.click()
+                    await analyzecomments()
+                    return
+            except StaleElementReferenceException:
+                pass
 
-    await switchtab(0)
+    except NoSuchElementException:
+        pass
 
 
 async def analyzecomment(comment: WebElement):
+    # print(comment.text)
+
     files.analyzed_comments += 1
 
     commenttext = comment.find_element_by_xpath("div[1]")
@@ -122,19 +142,20 @@ async def analyzecomment(comment: WebElement):
             except KeyError:
                 pass
 
-            await switchtab(2)
+            await switchtab(3)  # Vérification de page
             driver.get(href)
             if "profile picture" not in driver.find_element_by_css_selector("div#root").find_element_by_xpath("div/div/div[2]/div/div/div/a/img").get_attribute("alt"):
                 print("---- Page Tag: \"" + tagtext.replace("\n", "") + "\"\n" + driver.current_url)
-                await switchtab(1)
+                await switchtab(1)  # Post Facebook & Commentaires
                 return
 
-            await switchtab(1)
+            await switchtab(1)  # Post Facebook & Commentaires
             answerlink = ""
             for element in comment.find_elements_by_xpath("div[3]/a"):
                 if "répon" in element.text.lower():
                     answerlink = element.get_attribute("href")
 
+            await switchtab(2)  # Réponse à un commentaire
             if answerlink != "":
                 driver.get(answerlink)
                 with open('messages.json', encoding="utf-8") as messages_json:
@@ -155,10 +176,7 @@ async def analyzecomment(comment: WebElement):
 
             await files.addtohistory("warnings", commentauthorid, warning_content)
             await files.printstats()
-            await switchtab(1)
-
-    else:
-        pass
+            await switchtab(1)  # Post Facebook & Commentaires
 
 
 async def switchtab(tab=0):
