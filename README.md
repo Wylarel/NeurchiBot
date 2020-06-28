@@ -8,9 +8,17 @@
 Chers modérateur·trices du monde merveilleux des Neurchi, avez-vous déjà rêvé d'une modération dénnuée d'humanité, d'une dictature sans pardon envers les noobies, d'une modération aussi paresseuse qu'inutile ? Nous aussi ! A NeurchiBot™, ce rêve, nous faisons tout pour qu'il devienne réalité. C'est avec une valise remplie de confiance et un petit tuperware d'experience que nous tenterons d'apprendes des erreurs du grand frère de NBV2, le défunt [Neurchi Bot V1](https://neurchi.fandom.com/fr/wiki/Neurchi_Bot), et construire une nouvelle dictature sur des meilleurs bases.
 
 ### Agenda
-- **28/06 - 29/06** - NeurchiBot devrait rejoindre une grande partie des groupes Neurchi ce weekend. **Update:** Le compte du bot a été bloqué par facebook. Cette phase pourait donc s'étendre sur la deuxième phase.
-- **30/06 - 5/07** - NeurchiBot tournera secrètement sans interaction publique; même pas un angry react. Le but est de récolter un maximum de données avant de le rendre vivant pour éviter un maximum les faux positifs à son déploiement.
-- **5/07** - NeurchiBot devrait être lancé dans sa version rudimentaire. Il sera régulièrement mis à jour.
+- **28/06 - 29/06** - NeurchiBot tournera secrètement sans interaction publique; même pas un angry react. Le but est de récolter un maximum de données avant de le rendre vivant pour éviter un maximum les faux positifs à son déploiement.
+- **30/06** - NeurchiBot devrait être lancé dans sa version rudimentaire. Il sera régulièrement mis à jour.
+
+## Features
+- Detection de tags sauvages
+  - Detection uniquement de tag de profils et page
+  - Ne signale plus les tags de page
+  - *TODO: Detecter si la personne taguée est dans le groupe ou pas, bien que dans les deux cas ça reste un tag sauvage si aucun commentaire supplémentaire, on pourrait personaliser les messages*
+  - *TODO: Augmenter la liste des messages de réponse possible et améliorer leur qualité*
+- *TODO: Detection de mot clés*
+  - *TODO: Pouet pouet mdr*
 
 
 ## [EN] NeurchiBot V2, a second attempt of the NeurchiBot project
