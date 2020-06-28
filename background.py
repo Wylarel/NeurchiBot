@@ -1,6 +1,6 @@
 import json
 from asyncio import sleep
-from datetime import date, datetime
+from datetime import date
 import random
 
 import files
@@ -136,8 +136,8 @@ async def analyzecomment(comment: WebElement):
         if len(commenttexttext) < len(tagtext) + 10:
             temphistory = await files.readhistory()
             try:
-                if commentid in temphistory["warnings"][commentauthorid]:
-                    print("---- Already Seen Tag: \"" + tagtext.replace("\n", "") + "\"\n" + driver.current_url)
+                if str(commentid) in str(temphistory["warnings"][commentauthorid]):
+                    # print("---- Already Seen Tag: \"" + tagtext.replace("\n", "") + "\"\n" + driver.current_url)
                     return
             except KeyError:
                 pass
@@ -160,8 +160,8 @@ async def analyzecomment(comment: WebElement):
                 driver.get(answerlink)
                 with open('messages.json', encoding="utf-8") as messages_json:
                     messages = json.load(messages_json, encoding="utf-8")
-                    driver.find_element_by_css_selector("#composerInput").send_keys((messages["prefix"] + messages["wildtag"][random.randint(0, len(messages["wildtag"])-1)] + messages["suffix"]).replace("{}", commentid))
-                    driver.find_element_by_xpath("//input[@type='submit'][@value='Répondre']").click()
+                    driver.find_element_by_css_selector("#composerInput").send_keys((messages["prefix"] + messages["wildtag"][random.randint(0, len(messages["wildtag"]) - 1)] + messages["suffix"]).replace("{}", commentid))
+                driver.find_element_by_xpath("//input[@type='submit'][@value='Répondre']").click()
             else:
                 print("---- NO ANSWER BUTTON " + driver.current_url)
                 return
