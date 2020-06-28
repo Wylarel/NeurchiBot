@@ -1,5 +1,5 @@
 from asyncio import sleep
-
+import stats
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.webdriver import WebDriver
@@ -7,11 +7,6 @@ from selenium.webdriver.remote.webelement import WebElement
 
 driver: WebDriver
 commentdriver: WebDriver
-
-seen_posts = 0
-analyzed_posts = 0
-analyzed_comments = 0
-detected_comments = 0
 
 
 async def connect(email="neurchibotv2@gmail.com", password=open("PASSWORD.txt", "r").read()):
@@ -36,7 +31,7 @@ async def connect(email="neurchibotv2@gmail.com", password=open("PASSWORD.txt", 
         driver.quit()
         return
 
-    await printstats()
+    await stats.printstats()
     await analyzewall()
 
 
@@ -47,7 +42,7 @@ async def analyzewall():
         if "neurchi" in header.lower():
             await analyzepost(post)
     await renewwall()
-    await sleep(1)
+    await sleep(2)
     await analyzewall()
 
 
@@ -58,15 +53,14 @@ async def renewwall():
                 button.click()
                 return
     except NoSuchElementException:
-        await printstats()
+        await stats.printstats()
         print("No more posts on wall, refreshing the page in 30 seconds")
         await sleep(30)
         driver.refresh()
 
 
 async def analyzepost(post: WebElement):
-    global seen_posts
-    seen_posts += 1
+    stats.seen_posts += 1
     postname = post.find_element_by_css_selector("div header table").text
     commentslink = None
     for element in post.find_elements_by_css_selector("footer div a"):
@@ -81,8 +75,7 @@ async def analyzepost(post: WebElement):
     driver.get(commentslink)
 
     # DEBUG print("-- Analyzing post \"" + postname + "\"")
-    global analyzed_posts
-    analyzed_posts += 1
+    stats.analyzed_posts += 1
     for comment in driver.find_elements_by_xpath("//div[@id='m_story_permalink_view']/div/div/div/div/div"):
         try:
             commenttext = comment.find_element_by_xpath("div[1]")
@@ -95,8 +88,7 @@ async def analyzepost(post: WebElement):
 
 
 async def analyzecomment(comment: WebElement):
-    global analyzed_comments
-    analyzed_comments += 1
+    stats.analyzed_comments += 1
 
     # DEBUG print(driver.current_url)
     commenttext = comment.find_element_by_xpath("div[1]")
@@ -111,9 +103,8 @@ async def analyzecomment(comment: WebElement):
         if len(commenttext.text) < len(tag.text) + 20:
             print("---- Potential Tag: \"" + tag.text.replace("\n", "") + "\"\n" + driver.current_url)
             await alertmember(comment, reason="wildtag")
-            global detected_comments
-            detected_comments += 1
-            await printstats()
+            stats.detected_comments += 1
+            await stats.printstats()
     else:
         pass
         # DEBUG print("---- Accepted comment: \"" + commenttext.text.replace("\n", "") + "\"")
@@ -135,5 +126,3 @@ async def alertmember(comment, reason="wildtag"):
     pass
 
 
-async def printstats():
-    print("Seen Posts: " + str(seen_posts) + "\nAnalyzed Posts: " + str(analyzed_posts) + "\nAnalyzed Comments: " + str(analyzed_comments) + "\nDetected Comments: " + str(detected_comments))
