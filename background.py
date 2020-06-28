@@ -1,5 +1,7 @@
 from asyncio import sleep
-import stats
+from datetime import date, datetime
+
+import files
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.webdriver import WebDriver
@@ -31,7 +33,7 @@ async def connect(email="neurchibotv2@gmail.com", password=open("PASSWORD.txt", 
         driver.quit()
         return
 
-    await stats.printstats()
+    await files.printstats()
     await analyzewall()
 
 
@@ -53,76 +55,76 @@ async def renewwall():
                 button.click()
                 return
     except NoSuchElementException:
-        await stats.printstats()
+        await files.printstats()
         print("No more posts on wall, refreshing the page in 30 seconds")
         await sleep(30)
         driver.refresh()
 
 
 async def analyzepost(post: WebElement):
-    stats.seen_posts += 1
-    postname = post.find_element_by_css_selector("div header table").text
+    files.seen_posts += 1
+    await files.savestats()
     commentslink = None
     for element in post.find_elements_by_css_selector("footer div a"):
         if "commentaire" in element.text:
             commentslink = element.get_attribute("href")
 
     if not commentslink:
-        # DEBUG print("Couldn't see any comments on \"" + postname + "\"")
         return
 
     await switchtab(1)
     driver.get(commentslink)
 
-    # DEBUG print("-- Analyzing post \"" + postname + "\"")
-    stats.analyzed_posts += 1
+    files.analyzed_posts += 1
     for comment in driver.find_elements_by_xpath("//div[@id='m_story_permalink_view']/div/div/div/div/div"):
         try:
             commenttext = comment.find_element_by_xpath("div[1]")
             await analyzecomment(comment)
         except NoSuchElementException:
-            # DEBUG print("HAHAHA")
             pass
 
     await switchtab(0)
 
 
 async def analyzecomment(comment: WebElement):
-    stats.analyzed_comments += 1
+    files.analyzed_comments += 1
 
-    # DEBUG print(driver.current_url)
     commenttext = comment.find_element_by_xpath("div[1]")
-    # DEBUG print("<<<<!!! " + commenttext.text + "!!!>>>>")
+    commentid = str(comment.find_element_by_xpath('..').get_attribute("id"))
+    commentauthorid: str = comment.find_element_by_xpath("h3/a").get_attribute("href").split("?")[0].replace("https://mbasic.facebook.com/", "")
     try:
         tag = commenttext.find_element_by_xpath("a")
     except NoSuchElementException:
-        # DEBUG print("---- Accepted comment: \"" + commenttext.text.replace("\n", "") + "\"")
         return
 
     if "mbasic.facebook.com/" in tag.get_attribute("href") and "/groups/" not in tag.get_attribute("href") and "/hashtag/" not in tag.get_attribute("href") and tag.text not in tag.get_attribute("href"):
-        if len(commenttext.text) < len(tag.text) + 20:
+        if len(commenttext.text) < len(tag.text) + 10:
+            temphistory = await files.readhistory()
+            try:
+                if commentid in temphistory[commentauthorid]["warnings"]:
+                    print("---- Already Seen Tag: \"" + tag.text.replace("\n", "") + "\"\n" + driver.current_url)
+                    return
+            except KeyError:
+                pass
             print("---- Potential Tag: \"" + tag.text.replace("\n", "") + "\"\n" + driver.current_url)
-            await alertmember(comment, reason="wildtag")
-            stats.detected_comments += 1
-            await stats.printstats()
+            warning_content = {
+                commentid:
+                    {"date": str(date.today()),
+                     "comment": commenttext.text,
+                     "publication": driver.current_url
+                     }
+            }
+            await files.addtohistory("warnings", commentauthorid, warning_content)
     else:
         pass
-        # DEBUG print("---- Accepted comment: \"" + commenttext.text.replace("\n", "") + "\"")
 
 
 async def switchtab(tab=0):
     try:
         driver.switch_to.window(driver.window_handles[tab])
-        # print("Switch to tab " + str(tab))
     except IndexError:
-        # DOESNT WORK driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL + 't')
-        # THAT NEITHER ActionChains(driver).key_down(Keys.CONTROL).send_keys('t').key_up(Keys.CONTROL).perform()
         driver.execute_script('window.open("");')
-        # print("Opening a new tab")
         await switchtab(tab)
 
-
-async def alertmember(comment, reason="wildtag"):
-    pass
 
 
