@@ -34,7 +34,7 @@ async def connect(email="neurchibotv2@gmail.com", password=open("PASSWORD.txt", 
         await sleep(20)
         driver.quit()
         return
-
+    driver.get_screenshot_as_file("screenshots/" + "connect" + ".png")
     await files.printstats()
     await analyzewall()
 
@@ -102,7 +102,7 @@ async def analyzecomments():
         for link in driver.find_elements_by_css_selector("div#m_story_permalink_view div div div div a"):
             try:
                 if "Commentaires précédents" in link.text:
-                    link.click()
+                    driver.get(link.get_attribute("href"))
                     await analyzecomments()
                     return
             except StaleElementReferenceException:
@@ -132,6 +132,8 @@ async def analyzecomment(comment: WebElement):
 
     href = tag.get_attribute("href")
     tagtext = tag.text
+    if "Djy No" in tagtext:  # Ya un truc vraiment chelou avec son nom et le bot le signale en boucle du coup pour l'instant je vais juste l'ignorer
+        return
     if "mbasic.facebook.com/" in href and "/groups/" not in href and "/hashtag/" not in href and tagtext not in href:
         if len(commenttexttext) < len(tagtext) + 10:
             temphistory = await files.readhistory()
@@ -162,6 +164,7 @@ async def analyzecomment(comment: WebElement):
                     messages = json.load(messages_json, encoding="utf-8")
                     driver.find_element_by_css_selector("#composerInput").send_keys((messages["prefix"] + messages["wildtag"][random.randint(0, len(messages["wildtag"]) - 1)] + messages["suffix"]).replace("{}", commentid))
                 driver.find_element_by_xpath("//input[@type='submit'][@value='Répondre']").click()
+                driver.get_screenshot_as_file("screenshots/" + commentid + ".png")
             else:
                 print("---- NO ANSWER BUTTON " + driver.current_url)
                 return
