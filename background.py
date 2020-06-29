@@ -44,7 +44,7 @@ async def analyzewall():
         posts = driver.find_elements_by_css_selector("#root div section article")  # Prend tout les posts sur la page actuelle
         for post in posts:
             header = post.find_element_by_css_selector("div header table").text
-            if "neurchi" in header.lower():
+            if "neurchi" in header.lower() and "liberté d'expression" not in header.lower():
                 await analyzepost(post)
         await renewwall()  # Renouvelle la page actuelle
         await sleep(2)  # Délai par pure précaution, théoriquement retirable
@@ -132,7 +132,7 @@ async def analyzecomment(comment: WebElement):
 
     href = tag.get_attribute("href")
     tagtext = tag.text
-    if "Djy No" in tagtext:  # Ya un truc vraiment chelou avec son nom et le bot le signale en boucle du coup pour l'instant je vais juste l'ignorer
+    if "Djy No" in tagtext or "Paolo Curetti" in tagtext:  # Ya un truc vraiment chelou avec son nom et le bot le signale en boucle du coup pour l'instant je vais juste l'ignorer
         return
     if "mbasic.facebook.com/" in href and "/groups/" not in href and "/hashtag/" not in href and tagtext not in href:
         if len(commenttexttext) < len(tagtext) + 10:
