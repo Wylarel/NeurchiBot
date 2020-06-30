@@ -1,4 +1,5 @@
 # NeurchiBot
+## ⚠️ RUNNING THIS PROJECT DOES NOT RESPECT THE FACEBOOK GUIDELINES, USE ONLY AT YOUR OWN RISK ⚠️
 ## [FR] NeurchiBot V2, une deuxième tentative du projet NeurchiBot
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://wylarel.com/mit/)
 [![Facebook](https://img.shields.io/badge/Invite-Facebook-blue)](https://www.fb.com/NeurchiBotV2)
